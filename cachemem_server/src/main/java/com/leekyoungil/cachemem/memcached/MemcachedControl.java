@@ -26,11 +26,11 @@ import java.util.Map.Entry;
 public class MemcachedControl implements MemcachedInfo {
     private volatile static MemcachedControl instance = null;
 
-    private ConcurrentHashMap<Integer, String> serverNoMap = new ConcurrentHashMap<Integer, String>();
+    private ConcurrentHashMap<Integer, String> serverNoMap = new ConcurrentHashMap<>();
 
-    private CopyOnWriteArrayList<MemcachedClient> memcachedClient = new CopyOnWriteArrayList<MemcachedClient>();
+    private CopyOnWriteArrayList<MemcachedClient> memcachedClient = new CopyOnWriteArrayList<>();
     private MemcachedClient metaMemcachedClient = null;
-    private CopyOnWriteArrayList<Integer> confuseServerNo = new CopyOnWriteArrayList<Integer>();
+    private CopyOnWriteArrayList<Integer> confuseServerNo = new CopyOnWriteArrayList<>();
 
     public MemcachedControl () { }
 

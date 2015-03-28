@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.*;
 
 public class CacheMem extends Verticle implements CacheMemInterface {
-    public static LinkedBlockingQueue<CacheMemLog> logQueue = new LinkedBlockingQueue<CacheMemLog>();
+    public static LinkedBlockingQueue<CacheMemLog> logQueue = new LinkedBlockingQueue<>();
 
     @Override
     public void start() {
@@ -109,22 +109,21 @@ public class CacheMem extends Verticle implements CacheMemInterface {
      * Make threads.
      */
     private void makeThreads () {
-        Arrays.stream(serverSockets).parallel().forEach((portNum) -> {
-            System.out.println("portNum : " + portNum);
+        Arrays.stream(serverSockets).parallel().forEach((portNum) ->
             // Data input output Socket Thread Get / Set 생성
             new Thread(() -> {
-                //if (nonblocking) {
-                //    ClientHandlerNio clientHandlerNio = new ClientHandlerNio(portNum);
-                //    clientHandlerNio.start();
-                //} else {
+                /*
+                if (nonblocking) {
+                    ClientHandlerNio clientHandlerNio = new ClientHandlerNio(portNum);
+                    clientHandlerNio.start();
+                } else {
+                */
                     try {
                         ServerSocket socketServer = new ServerSocket(portNum, threadSocketMaxConnectionQueue);
-
-                        SynchronousQueue<Runnable> synchronousQueue = new SynchronousQueue<Runnable>();
-
+                        SynchronousQueue<Runnable> synchronousQueue = new SynchronousQueue<>();
                         ThreadPoolExecutor threadPool = new ThreadPoolExecutor(basicPoolSize, maximumPoolSize, keepPoolAliveTime, TimeUnit.MILLISECONDS, synchronousQueue);
 
-                        threadPool.setRejectedExecutionHandler((r, exc) -> {
+                           threadPool.setRejectedExecutionHandler((r, exc) -> {
                             try {
                                 Thread.sleep(300);
                             } catch (InterruptedException ex) {
@@ -145,7 +144,7 @@ public class CacheMem extends Verticle implements CacheMemInterface {
                         e.printStackTrace();
                     }
                 //}
-            }).start();
-        });
+            }).start()
+        );
     }
 }
