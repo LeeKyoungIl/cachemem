@@ -16,7 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Created by Kyoungil_Lee on 3/31/15.
+ * Created by leekyoungil (leekyoungil@gmail.com) on 3/31/15.
+ * github : https://github.com/LeeKyoungIl/cachemem
  */
 public abstract class MemcachedInfo implements MemcachedInterface {
 

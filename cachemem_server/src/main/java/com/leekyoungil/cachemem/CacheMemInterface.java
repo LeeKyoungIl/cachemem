@@ -3,7 +3,8 @@ package com.leekyoungil.cachemem;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by kyoungil_lee on 2014. 8. 5..
+ * Created by leekyoungil (leekyoungil@gmail.com) on 3/31/15.
+ * github : https://github.com/LeeKyoungIl/cachemem
  */
 public interface CacheMemInterface {
     public static final ConcurrentHashMap<String, Integer> addTTLTime = new ConcurrentHashMap<>();

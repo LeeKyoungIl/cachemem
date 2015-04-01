@@ -10,7 +10,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Created by kyoungil_lee on 10/31/14.
+ * Created by leekyoungil (leekyoungil@gmail.com) on 3/31/15.
+ * github : https://github.com/LeeKyoungIl/cachemem
  */
 public class ClientHandlerNio extends Thread {
     private LinkedList<Thread> clientList = new LinkedList<>();

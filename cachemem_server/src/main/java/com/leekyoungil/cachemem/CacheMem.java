@@ -20,6 +20,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Created by leekyoungil (leekyoungil@gmail.com) on 3/31/15.
+ * github : https://github.com/LeeKyoungIl/cachemem
+ */
 public class CacheMem extends Verticle implements CacheMemInterface {
 
     /**

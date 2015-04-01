@@ -3,7 +3,8 @@ package com.leekyoungil.cachemem.memcached;
 import net.rubyeye.xmemcached.MemcachedClient;
 
 /**
- * Created by kyoungil_lee on 2014. 7. 24..
+ * Created by leekyoungil (leekyoungil@gmail.com) on 3/31/15.
+ * github : https://github.com/LeeKyoungIl/cachemem
  */
 public interface MemcachedInterface {
     //memcached run script

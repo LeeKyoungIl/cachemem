@@ -1,26 +1,17 @@
 package com.leekyoungil.cachemem.memcached;
 
-import com.google.code.yanf4j.core.impl.StandardSocketOption;
 import com.leekyoungil.cachemem.CacheMem;
 import com.leekyoungil.cachemem.CacheMemInterface;
 import com.leekyoungil.cachemem.model.CacheMemLog;
 import net.rubyeye.xmemcached.MemcachedClient;
-import net.rubyeye.xmemcached.MemcachedClientBuilder;
-import net.rubyeye.xmemcached.XMemcachedClientBuilder;
-import net.rubyeye.xmemcached.command.BinaryCommandFactory;
 import net.rubyeye.xmemcached.exception.MemcachedException;
-import net.rubyeye.xmemcached.impl.ArrayMemcachedSessionLocator;
-import net.rubyeye.xmemcached.transcoders.SerializingTranscoder;
-import net.rubyeye.xmemcached.utils.AddrUtil;
-
-import java.io.IOException;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.*;
 import java.util.Map.Entry;
 
 /**
- * Created by kyoungil_lee on 2014. 7. 24..
+ * Created by leekyoungil (leekyoungil@gmail.com) on 3/31/15.
+ * github : https://github.com/LeeKyoungIl/cachemem
  */
 public class MemcachedControl extends MemcachedInfo {
 
