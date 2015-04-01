@@ -73,7 +73,19 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
     
     ######적당한 폴더로 이동시켜 준뒤 심볼릭 링크를 걸어준다.
     
-      - 
+      - mv apache-maven-3.3.1 /usr/local
+      - cd /usr/local
+      - ln -s apache-maven-3.3.1 maven
+      
+    ######Maven 의 PATH 를 설정해 준다. (.bash_profile 혹은 /etc/profile 에 설정)
+      
+      ```
+      MAVEN_HOME=/usr/local/maven
+      PATH=$PATH:$MAVEN_HOME/bin
+      export MAVEN_HOME
+      export PATH
+      ```
+      - source .bash_profile 혹은 /etc/profile
 
 
 
