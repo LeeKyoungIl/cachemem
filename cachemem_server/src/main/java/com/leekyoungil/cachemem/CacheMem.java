@@ -18,35 +18,68 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Created by leekyoungil (leekyoungil@gmail.com) on 3/31/15.
+ * github : https://github.com/LeeKyoungIl/cachemem
+ */
 public class CacheMem extends Verticle implements CacheMemInterface {
-    public static LinkedBlockingQueue<CacheMemLog> logQueue = new LinkedBlockingQueue<CacheMemLog>();
+
+    /**
+     * The constant LOG_QUEUE_MAP.
+     * 로그를 저장하는 queue hashmap 를 생성한다.
+     * (Create the log queue hashmap.)
+     */
+    public static AtomicInteger QUEUE_NO = new AtomicInteger(1);
+    public static ConcurrentHashMap<Integer, LinkedBlockingQueue<CacheMemLog>> LOG_QUEUE_MAP = new ConcurrentHashMap<>();
+
+    /**
+     * Sets queue no.
+     */
+    public static void setQueueNo () {
+        if (QUEUE_NO.get() == 1) {
+            QUEUE_NO.set(2);
+        } else {
+            QUEUE_NO.set(1);
+        }
+    }
 
     @Override
     public void start() {
-        // Set, Get thread 생성
+        /**
+         * HashMap initialization.
+         */
+        LOG_QUEUE_MAP.put(1, new LinkedBlockingQueue<>());
+        LOG_QUEUE_MAP.put(2, new LinkedBlockingQueue<>());
+
+        // Create a Set and Get thread.
         makeThreads();
 
-        // Logging Thread 생성 1분에 한번씩 돌면서 큐를 비윤다
+        /**
+         * Create a Logging Thread.
+         * 1분에 한번씩 돌면서 큐를 비윤고 로그를 저장한다.
+         * Start a pop the queue at the once per minutes, and save the log.
+         */
         new Thread(() -> {
-            while (true) {
-                if (CacheMem.logQueue.size() > 0) {
-                    CacheMemLog cacheMemLog = null;
+            Integer popQueueNo = QUEUE_NO.get();
+            setQueueNo();
 
-                    while ((cacheMemLog = CacheMem.logQueue.poll()) != null) {
-                        CacheMemLogger.getInstance().insertLog(cacheMemLog);
-                    }
-                }
+            LOG_QUEUE_MAP.get(popQueueNo).stream().parallel().forEach(cacheMemLog -> CacheMemLogger.getInstance().insertLog(cacheMemLog));
+            LOG_QUEUE_MAP.get(popQueueNo).clear();
 
-                try {
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                Thread.sleep(60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }).start();
 
-        // 추가 TTL 타임 설정
+        /**
+         * Create a add to set the TTL value Thread.
+         * 5분에 한번씩 돌면서 추가 TTL 타입을 설정한다.
+         * Start a thread at the 5 per minutes, and the TTL time.
+         */
         new Thread(() -> {
             while (true) {
                 CacheMemUtil.setAddTTLTime();
@@ -59,7 +92,9 @@ public class CacheMem extends Verticle implements CacheMemInterface {
             }
         }).start();
 
-        // Vert.x instance 생성
+        /**
+         * Create a Vert.x instance
+         */
         vertx.createHttpServer().setUsePooledBuffers(true).setReceiveBufferSize(BUFF_SIZE).setSendBufferSize(BUFF_SIZE).setTCPKeepAlive(false).setTCPNoDelay(true).setAcceptBacklog(10000).requestHandler((req) -> {
             MemcachedResult result = WebHandler.getInstance().actionData(req);
 
@@ -107,45 +142,60 @@ public class CacheMem extends Verticle implements CacheMemInterface {
 
     /**
      * Make threads.
+     * Set, Get 용 thread 를 만든다.
+     * (Create a Set and Get thread.)
      */
     private void makeThreads () {
-        Arrays.stream(serverSockets).parallel().forEach((portNum) -> {
-            System.out.println("portNum : " + portNum);
+        /**
+         * 이미 설정되어있는 서버의 소켓수대로 루프를 돈다.
+         * (Execute the number of the socket that is already set.)
+         *
+         */
+        Arrays.stream(serverSockets).parallel().forEach((portNum) ->
             // Data input output Socket Thread Get / Set 생성
             new Thread(() -> {
-                //if (nonblocking) {
-                //    ClientHandlerNio clientHandlerNio = new ClientHandlerNio(portNum);
-                //    clientHandlerNio.start();
-                //} else {
-                    try {
-                        ServerSocket socketServer = new ServerSocket(portNum, threadSocketMaxConnectionQueue);
-
-                        SynchronousQueue<Runnable> synchronousQueue = new SynchronousQueue<Runnable>();
-
-                        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(basicPoolSize, maximumPoolSize, keepPoolAliveTime, TimeUnit.MILLISECONDS, synchronousQueue);
-
-                        threadPool.setRejectedExecutionHandler((r, exc) -> {
-                            try {
-                                Thread.sleep(300);
-                            } catch (InterruptedException ex) {
-                                ex.printStackTrace();
-                            }
-
-                            exc.execute(r);
-                        });
-
-                        while (true) {
-                            Socket socket = socketServer.accept();
-
-                            if (socket != null) {
-                                threadPool.execute(new ClientHandler(socket));
-                            }
+                /*
+                 * sorry, non block io is not yet.
+                 *
+                if (nonblocking) {
+                    ClientHandlerNio clientHandlerNio = new ClientHandlerNio(portNum);
+                    clientHandlerNio.start();
+                } else {
+                */
+                try {
+                    /**
+                     * 쓰레드 풀을 만든다.
+                     * Create a thread pool.
+                     */
+                    ThreadPoolExecutor threadPool = new ThreadPoolExecutor(basicPoolSize, maximumPoolSize, keepPoolAliveTime, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
+                    threadPool.setRejectedExecutionHandler((r, exc) -> {
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+
+                        exc.execute(r);
+                    });
+
+                    /**
+                     * 소켓을 생성한다. (backLog 를 같이 설정해준다.)
+                     * Create a server socket. (initialization with backLog.)
+                     */
+                    ServerSocket socketServer = new ServerSocket(portNum, threadSocketMaxConnectionQueue);
+
+                    while (true) {
+                        Socket socket = socketServer.accept();
+
+                        if (socket != null) {
+                            threadPool.execute(new ClientHandler(socket));
+                        }
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 //}
-            }).start();
-        });
+            }).start()
+        );
     }
 }
