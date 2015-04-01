@@ -8,6 +8,10 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 /**
@@ -106,26 +110,31 @@ public class CacheMemUtil {
      * Sets add tTL time.
      */
     public static void setAddTTLTime () {
-        String fileName = "./flashdb_ttl.txt";
+        String fileName = "cachemem_add_ttl.txt";
 
         FileChannel channel = null;
         MappedByteBuffer byteByffer = null;
         Scanner scanner = null;
 
         try {
-            channel = new FileInputStream(fileName).getChannel();
-            byteByffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-            CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
-            CharBuffer charBuffer = decoder.decode(byteByffer);
-            scanner = new Scanner(charBuffer).useDelimiter("\n");
+            Path path = FileSystems.getDefault().getPath("./", fileName);
+            boolean pathExists = Files.exists(path, new LinkOption[]{LinkOption.NOFOLLOW_LINKS});
 
-            while (scanner.hasNext()) {
-                String tmpData = scanner.next();
+            if (pathExists) {
+                channel = new FileInputStream(fileName).getChannel();
+                byteByffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+                CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
+                CharBuffer charBuffer = decoder.decode(byteByffer);
+                scanner = new Scanner(charBuffer).useDelimiter("\n");
 
-                if (tmpData != null && !"".equals(tmpData) && tmpData.length() > 0) {
-                    String arrayTmpData[] = tmpData.split(":");
+                while (scanner.hasNext()) {
+                    String tmpData = scanner.next();
 
-                    CacheMemInterface.addTTLTime.put(arrayTmpData[0], Integer.parseInt(arrayTmpData[1]));
+                    if (tmpData != null && !"".equals(tmpData) && tmpData.length() > 0) {
+                        String arrayTmpData[] = tmpData.split(":");
+
+                        CacheMemInterface.addTTLTime.put(arrayTmpData[0], Integer.parseInt(arrayTmpData[1]));
+                    }
                 }
             }
         } catch (IOException iex) {
