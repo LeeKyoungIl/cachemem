@@ -8,7 +8,7 @@ CacheMem 은 Database 의 result set 이나 혹은 특정 비즈니스 로직 (�
 memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황에 따라서 유연하게 서버를 늘려나갈수 
 있는 캐시 서버 입니다.
 
-# CacheMem 설치
+## CacheMem 설치
   1. Java 8 설치하기
   
     ######JDK를 다운로드한다.
@@ -60,6 +60,21 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
       export PATH
       ```
       - source .bash_profile 혹은 /etc/profile
+      
+  3. Maven 설치하기
+  
+    ######Maven을 다운로드한다.
+  
+      - http://apache.tt.co.kr/maven/maven-3/3.3.1/binaries/apache-maven-3.3.1-bin.tar.gz
+    
+    ######압축을 풀어준다.
+
+      - tar xvfz apache-maven-3.3.1-bin.tar.gz
+    
+    ######적당한 폴더로 이동시켜 준뒤 심볼릭 링크를 걸어준다.
+    
+      - 
+
 
 
 ## CacheMem 진행 상황 
