@@ -86,6 +86,32 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
       export PATH
       ```
       - source .bash_profile 혹은 /etc/profile
+      
+  4. Vert.x 설치하기
+    
+    ######Vert.x 다운로드한다.
+  
+      - http://vertx.io/vertx-downloads/downloads/vert.x-1.3.1.final.tar.gz
+    
+    ######압축을 풀어준다.
+
+      - tar xvfz vert.x-1.3.1.final.tar.gz
+      
+    ######적당한 폴더로 이동시켜 준뒤 심볼릭 링크를 걸어준다.
+    
+      - mv vert.x-1.3.1.final /usr/local
+      - cd /usr/local
+      - ln -s vert.x-1.3.1.final vertx
+      
+    ######Vert.x 의 PATH 를 설정해 준다. (.bash_profile 혹은 /etc/profile 에 설정)
+      
+      ```
+      VERTX_HOME=/usr/local/vertx
+      PATH=$PATH:$VERTX_HOME/bin
+      export VERTX_HOME
+      export PATH
+      ```
+      - source .bash_profile 혹은 /etc/profile
 
 
 
