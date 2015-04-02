@@ -9,6 +9,9 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
 있는 캐시 서버 입니다.
 
 ## CacheMem 설치
+
+  * 본 문서는 CentOS 6.x 버전에서 설치하는것을 기준으로 작성 되었습니다.
+
   1. Java 8 설치하기
   
     ######JDK를 다운로드한다.
@@ -163,7 +166,22 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
       - -P : pid 파일 위치 
       - -t : 사용할 thread 수 
       
+  6. git 설치
+  
+    - yum install git
+  
+  7. CacheMem 설치
+  
+    ######git clone
+  
+      - git clone https://github.com/LeeKyoungIl/cachemem CacheMem
+    
+    ######build
 
+      - cd CacheMem
+      - cd cachemem_server
+      - gradle wrapper
+      - ./gradlew build
 
 
 ## CacheMem 진행 상황 
