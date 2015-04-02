@@ -189,6 +189,12 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
      - cd build/mods/
      - vertx install com.leekyoungil~cachemem_server~1.0.0-final
      
+    ######jvm 옵션 조정 
+    
+     - vertx 실행 파일을 열어서 JVM_OPTS 항목을 수정 합니다. ex vi /usr/local/vertx/bin/vertx
+     - 예를들어 (각 시스템이 맞도록 설정 하시면 됩니다.)
+       * JVM_OPTS="-Djava.awt.headless=true -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:ErrorFile=/home/err.log -XX:+UseG1GC"
+     
     ######run CacheMem
     
      - vertx runMod com.leekyoungil~cachemem_server~1.0.0-final & 
