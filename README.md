@@ -166,11 +166,30 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
       - -P : pid 파일 위치 
       - -t : 사용할 thread 수 
       
-  6. git 설치
+  6. MySQL 설치 
+    * 본 문서는 약식으로 yum 이용해서 MySQL을 설치 하겠습니다. 운영 서버에서는 서버에 최적화 되도록 컴파일 설치를 권장 합니다.
+    
+    ######install
+
+      - yum install mysql mysql-server
+      
+    ######start
+    
+      - /etc/rc.d/init.d/mysqld start
+      
+    ######setting
+    
+      ```
+      mysql> create database cachemem_log;
+      mysql> GRANT ALL PRIVILEGES ON cachemem_log.* to 'test'@'127.0.0.1' IDENTIFIED BY 'test_password' WITH GRANT OPTION;
+      mysql> flush privileges;
+      ```
+      
+  7. git 설치
   
     - yum install git
   
-  7. CacheMem 설치 및 실행
+  8. CacheMem 설치 및 실행
   
     ######git clone
   
