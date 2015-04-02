@@ -112,6 +112,56 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
       export PATH
       ```
       - source .bash_profile 혹은 /etc/profile
+      
+  5. Memcached 설치하기 
+    
+    ######libevent 설치.
+
+      - https://sourceforge.net/projects/levent/files/libevent/libevent-2.0/libevent-2.0.22-stable.tar.gz
+      - tar xvfz libevent-2.0.22-stable.tar.gz
+      - cd libevent-2.0.22-stable
+      - ./configure
+      - make
+      - make install
+      
+    ######libevent ld path 설정 
+    
+      - vi /etc/ld.so.conf
+      - /usr/local/lib path 추가 
+      
+      ```
+      include ld.so.conf.d/*.conf
+      /usr/local/lib
+      ```
+      
+      - ldconfig -v 실행하여 적용 및 확인
+    
+    ######Memcached 설치 
+      
+      - http://www.memcached.org/files/memcached-1.4.22.tar.gz
+      - tar xvfz memcached-1.4.22.tar.gz
+      - cd memcached-1.4.22
+      - ./configure --prefix=/usr/local/memcached-1.4.22 --with-libevent=/usr/local/lib/
+      - make 
+      - make install
+      - cd /usr/local
+      - ln -s memcached-1.4.22 memcached
+      
+    ######Memcached 실행 
+    
+      - /usr/local/memcached/bin/memcached -p 11211 -d -u root -m 32 -c 10240 -b 10240 -P /dev/shm/memcached.pid -t 1
+      
+    ######Memcached 실행 옵션 설명 
+    
+      - -p : tcp 포트번호
+      - -d : daemon mode  
+      - -u : 유저 실행 권한 
+      - -m : 사용할 최대 메모리 (mb 단위)
+      - -c : 최대 접속 수
+      - -b : 최대 백로그 (큐)
+      - -P : pid 파일 위치 
+      - -t : 사용할 thread 수 
+      
 
 
 
