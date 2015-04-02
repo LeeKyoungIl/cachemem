@@ -70,8 +70,6 @@ public class MemcachedControl extends MemcachedInfo {
             // 처음은 무조건 localhost 로 set 시도
             result = this.memcachedClient.get(serverNo).set(key, ((ttl > 0) ? ttl+addTTLTime : this.timeout), value);
 
-            CacheMemLog log = new CacheMemLog();
-
             if (result == false) {
                 serverNo = getServerNo(-1, 0);
 
@@ -105,6 +103,7 @@ public class MemcachedControl extends MemcachedInfo {
                 }
             }
 
+            CacheMemLog log = new CacheMemLog();
             log.setSiteName(siteName);
             log.setKey(key);
             log.setObjectData(value);
@@ -115,9 +114,7 @@ public class MemcachedControl extends MemcachedInfo {
             log.setItemName(itemName);
             log.setOriginKey(originKey);
 
-            LinkedBlockingQueue<CacheMemLog> cacheMemsLog = CacheMem.LOG_QUEUE_MAP.get(CacheMem.QUEUE_NO);
-
-            cacheMemsLog.add(log);
+            CacheMem.LOG_QUEUE_MAP.get(CacheMem.QUEUE_NO.get()).add(log);
         } catch (TimeoutException|InterruptedException|MemcachedException|NullPointerException e) {
             memcachedResult = handleToException(e, memcachedResult);
         }
