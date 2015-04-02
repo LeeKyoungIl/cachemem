@@ -94,17 +94,17 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
     
     ######Vert.x 다운로드한다.
   
-      - http://vertx.io/vertx-downloads/downloads/vert.x-1.3.1.final.tar.gz
+      - https://bintray.com/artifact/download/vertx/downloads/vert.x-2.1.5.tar.gz
     
     ######압축을 풀어준다.
 
-      - tar xvfz vert.x-1.3.1.final.tar.gz
+      - tar xvfz vert.x-2.1.5.tar.gz
       
     ######적당한 폴더로 이동시켜 준뒤 심볼릭 링크를 걸어준다.
     
-      - mv vert.x-1.3.1.final /usr/local
+      - mv vert.x-2.1.5 /usr/local
       - cd /usr/local
-      - ln -s vert.x-1.3.1.final vertx
+      - ln -s vert.x-2.1.5 vertx
       
     ######Vert.x 의 PATH 를 설정해 준다. (.bash_profile 혹은 /etc/profile 에 설정)
       
@@ -170,7 +170,7 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
   
     - yum install git
   
-  7. CacheMem 설치
+  7. CacheMem 설치 및 실행
   
     ######git clone
   
@@ -182,6 +182,11 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
       - cd cachemem_server
       - gradle wrapper
       - ./gradlew build
+      - ./gradlew install
+      
+    ######deploying module
+    
+     - vertx runMod com.leekyoungil~cachemem_server~1.0.0-final & 
 
 
 ## CacheMem 진행 상황 
