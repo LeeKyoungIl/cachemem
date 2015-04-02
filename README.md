@@ -183,6 +183,60 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
       mysql> create database cachemem_log;
       mysql> GRANT ALL PRIVILEGES ON cachemem_log.* to 'test'@'127.0.0.1' IDENTIFIED BY 'test_password' WITH GRANT OPTION;
       mysql> flush privileges;
+      mysql> use cachemem_log;
+      ```
+      
+    ######log table 생성 
+    
+      ```
+      mysql> CREATE TABLE `cachemem_hit_ratio` (
+      ->   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      ->   `server_ip` char(15) DEFAULT NULL,
+      ->   `hit` int(11) DEFAULT NULL,
+      ->   `hit_percent` float DEFAULT NULL,
+      ->   `miss` int(11) DEFAULT NULL,
+      ->   `miss_percent` float DEFAULT NULL,
+      ->   `total` int(11) DEFAULT NULL,
+      ->   `regdate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+      ->   PRIMARY KEY (`id`)
+      -> ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=16;
+
+      mysql> CREATE TABLE `cachemem_set_log` (
+      ->   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      ->   `sitename` varchar(30) DEFAULT NULL,
+      ->   `itemname` varchar(255) DEFAULT NULL,
+      ->   `originKey` varchar(255) DEFAULT NULL,
+      ->   `md5key` char(32) DEFAULT NULL,
+      ->   `object` longblob,
+      ->   `objectSize` int(11) DEFAULT '0',
+      ->   `settime` int(20) DEFAULT '0',
+      ->   `ttl` smallint(11) DEFAULT '0',
+      ->   `ttl_m` smallint(6) DEFAULT '0',
+      ->   `ipaddress` char(16) DEFAULT NULL,
+      ->   `regdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      ->   PRIMARY KEY (`id`),
+      ->   KEY `idx_md5key` (`md5key`),
+      ->   KEY `idx_sitename_originKey` (`sitename`,`originKey`),
+      ->   KEY `idx_regdate` (`regdate`)
+      -> ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=4;
+
+      mysql> CREATE TABLE `cachemem_set_log_error` (
+      ->   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      ->   `sitename` varchar(30) DEFAULT NULL,
+      ->   `itemname` varchar(255) DEFAULT NULL,
+      ->   `originKey` varchar(255) DEFAULT NULL,
+      ->   `md5key` char(32) DEFAULT NULL,
+      ->   `object` longblob,
+      ->   `objectSize` int(11) DEFAULT NULL,
+      ->   `settime` int(20) DEFAULT NULL,
+      ->   `ttl` smallint(11) DEFAULT NULL,
+      ->   `ipaddress` char(16) DEFAULT NULL,
+      ->   `regdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      ->   PRIMARY KEY (`id`),
+      ->   KEY `idx_md5key` (`md5key`),
+      ->   KEY `idx_sitename_originKey` (`sitename`,`originKey`),
+      ->   KEY `idx_regdate` (`regdate`)
+      -> ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=4;
       ```
       
   7. git 설치
