@@ -118,7 +118,7 @@ public class MemcachedControl extends MemcachedInfo {
             LinkedBlockingQueue<CacheMemLog> cacheMemsLog = CacheMem.LOG_QUEUE_MAP.get(CacheMem.QUEUE_NO);
 
             cacheMemsLog.add(log);
-        } catch (TimeoutException|InterruptedException|MemcachedException e) {
+        } catch (TimeoutException|InterruptedException|MemcachedException|NullPointerException e) {
             memcachedResult = handleToException(e, memcachedResult);
         }
 

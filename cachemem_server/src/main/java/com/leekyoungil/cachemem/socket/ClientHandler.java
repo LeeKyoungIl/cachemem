@@ -21,10 +21,10 @@ public class ClientHandler implements Runnable {
         try {
             this.conn.setSendBufferSize(CacheMem.BUFF_SIZE);
             this.conn.setReceiveBufferSize(CacheMem.BUFF_SIZE);
-            this.conn.setKeepAlive(false);
-            this.conn.setTcpNoDelay(false);
-            this.conn.setSoTimeout(10000);
-            this.conn.setPerformancePreferences(0, 1, 2);
+            this.conn.setKeepAlive(true);
+            this.conn.setTcpNoDelay(true);
+            this.conn.setSoTimeout(5000);
+            this.conn.setPerformancePreferences(2, 1, 0);
         } catch (SocketException e) {
             e.printStackTrace();
 
@@ -62,6 +62,7 @@ public class ClientHandler implements Runnable {
             try {
                 data = in.readUTF();
             } catch (Exception ex) {
+                ex.printStackTrace();
                 data = null;
             }
 
