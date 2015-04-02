@@ -150,7 +150,7 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
     ######Memcached 실행 
     
       - 데이타 저장용 : /usr/local/memcached/bin/memcached -p 11211 -d -u root -m 32 -c 10240 -b 10240 -P /dev/shm/memcached.pid -t 1
-      - 메타 데이타 저장용 : /usr/local/memcached/bin/memcached -p 11311 -d -u root -m 32 -c 10240 -b 10240 -P /dev/shm/memcached.pid -t 1
+      - 메타 데이타 저장용 : /usr/local/memcached/bin/memcached -p 11311 -d -u root -m 32 -c 10240 -b 10240 -P /dev/shm/memcached_meta.pid -t 1
       
     ######Memcached 실행 옵션 설명 
     
