@@ -185,6 +185,11 @@ memcached 에 캐시 하여 빠르게 결과를 리턴해 줄수있으며 상황
       - ./gradlew install
       
     ######deploying module
+     
+     - cd build/mods/
+     - vertx install com.leekyoungil~cachemem_server~1.0.0-final
+     
+    ######run CacheMem
     
      - vertx runMod com.leekyoungil~cachemem_server~1.0.0-final & 
 
