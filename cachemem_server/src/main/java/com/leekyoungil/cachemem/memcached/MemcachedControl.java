@@ -157,7 +157,7 @@ public class MemcachedControl extends MemcachedInfo {
                 this.metaMemcachedClient = null;
                 metaConnect();
             }
-        } catch (TimeoutException|InterruptedException|MemcachedException e) {
+        } catch (TimeoutException|InterruptedException|MemcachedException|NullPointerException e) {
             memcachedResult = handleToException(e, memcachedResult);
             tmpResult = null;
         }
@@ -173,7 +173,7 @@ public class MemcachedControl extends MemcachedInfo {
                             break;
                         }
                     }
-                } catch (TimeoutException|InterruptedException|MemcachedException e) {
+                } catch (TimeoutException|InterruptedException|MemcachedException|NullPointerException e) {
                     memcachedResult = handleToException(e, memcachedResult);
                     tmpResult = null;
                 }
@@ -210,7 +210,7 @@ public class MemcachedControl extends MemcachedInfo {
                 memcachedClientTmp.delete(key);
                 memcachedResult.setResultText(SUCCESS_001);
                 memcachedResult.setResult(true);
-            } catch (TimeoutException|InterruptedException|MemcachedException e) {
+            } catch (TimeoutException|InterruptedException|MemcachedException|NullPointerException e) {
                 memcachedResult = handleToException(e, memcachedResult);
             }
         }

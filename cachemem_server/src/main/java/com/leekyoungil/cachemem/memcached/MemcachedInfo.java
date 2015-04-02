@@ -124,6 +124,10 @@ public abstract class MemcachedInfo implements MemcachedInterface {
     /**
      * Gets memcached server connection.
      *
+     * memcached 서버 접속 옵션으로 자신의 서버 상황에 맞추어 옵션을 변경 해줘야 한다.
+     * this method is a memcached server connection options.
+     * you should try to be changing the options on your server situation.
+     *
      * @param serverAddress the server address
      * @return the memcached server connection
      */
