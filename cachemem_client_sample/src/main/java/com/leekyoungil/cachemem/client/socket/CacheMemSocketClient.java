@@ -64,7 +64,8 @@ public class CacheMemSocketClient {
             String readValue = new String(readDataResult).trim();
 
             if (readValue != null && !readValue.isEmpty() && readValue.contains("SUCCESS")) {
-                String byteSize[] = readValue.split("&");
+                String tmpResult[] = readValue.split("��");
+                String byteSize[] = tmpResult[0].split("&");
 
                 // 결과값이 있으면 데이타를 읽어와서 오브젝트로 변환후 저장
                 if ("SUCCESS".equals(byteSize[0])) {
@@ -320,5 +321,32 @@ public class CacheMemSocketClient {
             }
         }
         return bytes;
+    }
+    
+    /**
+     * Gets random number.
+     *
+     * @return the random number
+     */
+    public static int getRandomNumber (int count) {
+        if (count == 1) {
+            return 0;
+        }
+
+        int readServerArray[] = new int[(count*10)];
+        int i = 0;
+        int inputNo = 0;
+
+        for (i = 0; i < (count*10); i++) {
+            if (inputNo == count) {
+                inputNo = 0;
+            }
+
+            readServerArray[i] = inputNo;
+            inputNo++;
+        }
+
+        Random rand = new Random(System.nanoTime());
+        return readServerArray[Math.abs(rand.nextInt((count*10)))];
     }
 }
