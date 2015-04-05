@@ -1,0 +1,13 @@
+{
+    "main":"com.leekyoungil.cachemem.CacheMem",
+    "auto-redeploy": true,
+
+    "description":"CacheMem_Server",
+    "licenses": ["Private"],
+    "author": "Kyoungil Lee",
+
+    // Optional fields
+    "developers": ["Kyoungil Lee"],
+    "keywords": ["vert.x", "module", "java", "gradle"],
+    "homepage": "http://blog.leekyoungil.com"
+}

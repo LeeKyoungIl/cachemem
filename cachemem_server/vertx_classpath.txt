@@ -1,0 +1,7 @@
+src/main/resources
+bin
+out/production/cachemem_server
+out/test/cachemem_server
+build/deps
+build/classes/main
+build/resources/main
