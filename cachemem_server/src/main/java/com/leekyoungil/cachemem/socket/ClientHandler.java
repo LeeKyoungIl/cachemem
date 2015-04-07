@@ -20,11 +20,8 @@ public class ClientHandler implements Runnable {
         this.conn = conn;
         try {
             this.conn.setSendBufferSize(CacheMem.BUFF_SIZE);
-            this.conn.setReceiveBufferSize(CacheMem.BUFF_SIZE);
             this.conn.setKeepAlive(true);
             this.conn.setTcpNoDelay(true);
-            this.conn.setSoTimeout(5000);
-            this.conn.setPerformancePreferences(2, 1, 0);
         } catch (SocketException e) {
             e.printStackTrace();
 
