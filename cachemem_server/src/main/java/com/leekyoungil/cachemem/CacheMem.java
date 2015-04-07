@@ -162,27 +162,33 @@ public class CacheMem extends Verticle implements CacheMemInterface {
                     clientHandlerNio.start();
                 } else {
                 */
+                ServerSocket socketServer = null;
                 try {
+                    /**
+                     * 소켓을 생성한다. (backLog 를 같이 설정해준다.)
+                     * Create a server socket. (initialization with backLog.)
+                     */
+                    socketServer = new ServerSocket(portNum, threadSocketMaxConnectionQueue);
+
+                    socketServer.setReuseAddress(true);
+                    socketServer.setReceiveBufferSize(FlashDb.BUFF_SIZE);
+                    socketServer.setSoTimeout(10000);
+                    socketServer.setPerformancePreferences(2, 1, 0);
+
                     /**
                      * 쓰레드 풀을 만든다.
                      * Create a thread pool.
                      */
                     ThreadPoolExecutor threadPool = new ThreadPoolExecutor(basicPoolSize, maximumPoolSize, keepPoolAliveTime, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
-                    threadPool.setRejectedExecutionHandler((r, exc) -> {
+                    threadPool.setRejectedExecutionHandler((r, executor) -> {
                         try {
                             Thread.sleep(300);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
 
-                        exc.execute(r);
+                        executor.execute(r);
                     });
-
-                    /**
-                     * 소켓을 생성한다. (backLog 를 같이 설정해준다.)
-                     * Create a server socket. (initialization with backLog.)
-                     */
-                    ServerSocket socketServer = new ServerSocket(portNum, threadSocketMaxConnectionQueue);
 
                     while (true) {
                         Socket socket = socketServer.accept();
@@ -193,6 +199,14 @@ public class CacheMem extends Verticle implements CacheMemInterface {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+
+                    try {
+                        if (socketServer != null) {
+                            socketServer.close();
+                        }
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
                 //}
             }).start()
