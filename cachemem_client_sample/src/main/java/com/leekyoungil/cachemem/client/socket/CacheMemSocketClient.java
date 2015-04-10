@@ -92,36 +92,10 @@ public class CacheMemSocketClient {
 
             reConnectCheck = true;
         } finally {
+            cacheMemResult = closeSocket(cacheMemResult, write, read, socket);
+
             if (reConnectCheck && serverAddress.length > 1 && reConnect < 1) {
                 return get(((serverNo == 0) ? 0 : CacheMemSocketClient.getRandomNumber((("real".equals(serverType)) ? CacheMemDefine.SERVER_REAL_ADDRESS.length : CacheMemDefine.SERVER_DEV_ADDRESS.length))), CacheMemSocketClient.getRandomNumber(CacheMemDefine.SERVER_PORT_SET.length), serverType, key, (++reConnect));
-
-            }
-
-            if (write != null) {
-                try {
-                    write.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    cacheMemResult.setErrorText("DataOutputStream close io exception");
-                }
-            }
-
-            if (read != null) {
-                try {
-                    read.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    cacheMemResult.setErrorText("DataInputStream close io exception");
-                }
-            }
-
-            if (socket != null) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    cacheMemResult.setErrorText("Socket close io exception");
-                }
             }
         }
 
@@ -198,36 +172,50 @@ public class CacheMemSocketClient {
 
             reConnectCheck = true;
         } finally {
+            cacheMemResult = closeSocket(cacheMemResult, write, read, socket);
+
             if (reConnectCheck && serverAddress.length > 1 && reConnect < 1) {
                 return set(((serverNo == 0) ? 0 : CacheMemSocketClient.getRandomNumber((("real".equals(serverType)) ? CacheMemDefine.SERVER_REAL_ADDRESS.length : CacheMemDefine.SERVER_DEV_ADDRESS.length))), CacheMemSocketClient.getRandomNumber(CacheMemDefine.SERVER_PORT_SET.length), serverType, siteName, originKey, itemName, key, data, ttl, ipAddress, (++reConnect));
-
             }
+        }
 
-            if (write != null) {
-                try {
-                    write.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    cacheMemResult.setErrorText("DataOutputStream close io exception");
-                }
+        return cacheMemResult;
+    }
+
+    /**
+     * Close socket.
+     *
+     * @param cacheMemResult the cache mem result
+     * @param write the write
+     * @param read the read
+     * @param socket the socket
+     * @return the cache mem result
+     */
+    public static CacheMemResult closeSocket (CacheMemResult cacheMemResult, DataOutputStream write, DataInputStream read, Socket socket) {
+        if (write != null) {
+            try {
+                write.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                cacheMemResult.setErrorText("DataOutputStream close io exception");
             }
+        }
 
-            if (read != null) {
-                try {
-                    read.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    cacheMemResult.setErrorText("DataInputStream close io exception");
-                }
+        if (read != null) {
+            try {
+                read.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                cacheMemResult.setErrorText("DataInputStream close io exception");
             }
+        }
 
-            if (socket != null) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    cacheMemResult.setErrorText("Socket close io exception");
-                }
+        if (socket != null) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                cacheMemResult.setErrorText("Socket close io exception");
             }
         }
 
