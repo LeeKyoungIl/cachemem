@@ -172,7 +172,6 @@ public class CacheMem extends Verticle implements CacheMemInterface {
 
                     socketServer.setReuseAddress(true);
                     socketServer.setReceiveBufferSize(CacheMem.BUFF_SIZE);
-                    socketServer.setSoTimeout(10000);
                     socketServer.setPerformancePreferences(2, 1, 0);
 
                     /**
