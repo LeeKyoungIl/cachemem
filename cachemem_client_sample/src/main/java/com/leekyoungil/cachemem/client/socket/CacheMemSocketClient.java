@@ -57,33 +57,17 @@ public class CacheMemSocketClient {
             // Object 데이타를 읽어오는 소켓 스트림 생성
             read = new DataInputStream(socket.getInputStream());
 
-            byte[] readDataResult = new byte[1024];
+            int resultSize = read.readInt();
 
-            read.read(readDataResult);
+            cacheMemResult.setResult(true);
 
-            String readValue = new String(readDataResult).trim();
+            if (resultSize > 0) {
+                byte[] responseByte = new byte[resultSize];
+                read.readFully(responseByte);
 
-            if (readValue != null && !readValue.isEmpty() && readValue.contains("SUCCESS")) {
-                String tmpResult[] = readValue.split("��");
-                String byteSize[] = tmpResult[0].split("&");
-
-                // 결과값이 있으면 데이타를 읽어와서 오브젝트로 변환후 저장
-                if ("SUCCESS".equals(byteSize[0])) {
-                    // Socket 데이타 send 시도 GET 메서드 키값과 같이 전달한다.
-                    write.write("READY".getBytes());
-                    write.flush();
-
-                    read = null;
-                    read = new DataInputStream(socket.getInputStream());
-
-                    byte[] responseByte = new byte[Integer.parseInt(byteSize[1])];
-                    read.readFully(responseByte);
-
-                    cacheMemResult.setResult(true);
-                    cacheMemResult.setResultData(toObject(responseByte));
-                } else {
-                    cacheMemResult.setResultData(new String("empty"));
-                }
+                cacheMemResult.setResultData(toObject(responseByte));
+            } else {
+                cacheMemResult.setResultData(new String("empty"));
             }
         } catch (IOException cex) {
             cex.printStackTrace();

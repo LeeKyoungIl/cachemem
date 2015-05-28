@@ -77,11 +77,10 @@ public class ClientHandler implements Runnable {
 
                             if (resultData.isResult() && resultData.getResultObject() != null) {
                                 byte[] resultByte = (byte[]) resultData.getResultObject();
-                                out.writeUTF("SUCCESS&"+resultByte.length);
-                                out.flush();
+                                out.writeInt(resultByte.length);
                                 out.write(resultByte);
                             } else {
-                                out.writeUTF("FAILED&" + ("empty".getBytes().length));
+                                out.writeInt(0);
                             }
                             break;
 
